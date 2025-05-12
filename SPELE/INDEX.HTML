@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VICTORIA'S SECRET SPĒLE</title>
+</head>
+<body>
+    
+</body>
+</html>
+<html>
+<body>
+<canvas id="myCanvas" width=300 height=300 style="border:1px solid">  </canvas> 
+<script>
+
+ var ctx = myCanvas.getContext("2d");
+
+  //nodrošina kur/cik tālu kustēsies grozs
+ function MyKeyDownHandler (MyEvent) { 
+   if (MyEvent.keyCode == 37 && grozs_x > 0) {grozs_x = grozs_x - 10}; 
+   if (MyEvent.keyCode == 39 && grozs_x+GrozsImg.width < myCanvas.width)
+            {grozs_x = grozs_x+10};
+   }
+
+ addEventListener("keydown", MyKeyDownHandler); 
+
+ let grozs_x = 0; //sākotnējā horizontālā pozīcija
+ let grozs_y = 0; //sākotnējā vertikālā pozīcija
+ let GrozsImg = new Image();
+ GrozsImg.src = "https://cdn-icons-png.flaticon.com/128/1685/1685513.png"; //groza atttēls
+
+ let smarža_x = 0; //sākotnējā horizontālā pozīcija
+ let smarža_y = 0; //sākotnējā vertikālā pozīcija
+ let SmaržaImg = new Image();
+ SmaržaImg.src = "https://cdn-icons-png.flaticon.com/128/539/539518.png"; //smaržas attēls
+
+ let score = 0;
+
+//Funkcija, kas pārbauda, vai divi attēli saskaras
+ function ImagesTouching(x1, y1, img1, x2, y2, img2) {
+          if (x1 >= x2+img2.width || x1+img1.width <= x2) return false;   
+          if (y1 >= y2+img2.height || y1+img1.height <= y2) return false; 
+          return true;                                                       
+          }
+ let time_remaining = 20;
+
+
+ function Do_a_Frame () {
+    ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
+
+    ctx.fillStyle= "purple"; //teksta krāsa
+    ctx.font = "20px Arial"; //teksta fonts/lielums
+    ctx.fillText("Score: " + score, 0, 20);
+
+    grozs_y = myCanvas.height - GrozsImg.height - 20;
+        ctx.fillText("Time Remaining: " + Math.round(time_remaining), 0, 45);
+
+    if (time_remaining <= 0) {
+          ctx.fillStyle= "red"; //teksta krāsa
+          ctx.font = "bold 50px Arial"; //teksta fonts/lielums
+          ctx.textAlign="center"; //tekstu uzliek centrā
+          ctx.fillText("Game Over", myCanvas.width / 2, myCanvas.height / 2);
+          ctx.textAlign="left";
+          }
+    else {
+          time_remaining = time_remaining - 1/40;
+
+          smarža_y = smarža_y + 3; //smarža kustās uz leju
+          if (smarža_y > myCanvas.height) {
+              smarža_y= 0;
+              smarža_x= Math.random() * (myCanvas.width - SmaržaImg.width);
+              }   
+          }
+    ctx.drawImage(SmaržaImg, smarža_x, smarža_y);
+
+ctx.drawImage(GrozsImg, grozs_x, grozs_y);
+
+    if (ImagesTouching(grozs_x, grozs_y, GrozsImg, smarža_x, smarža_y, SmaržaImg)) {
+        score= score + 1; //ja smaržas saskaras ar grozu pieskaitās punkts
+        smarža_x= -SmaržaImg.width;
+        }
+    } 
+    //kontrolē spēles ātrumu
+     setInterval(Do_a_Frame, 20);
+
+</script>
+</body>

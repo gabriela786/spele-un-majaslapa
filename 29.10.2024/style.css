@@ -1,0 +1,17 @@
+
+.header{
+    background-color: rgb(194, 194, 194);
+}
+body{
+    background-color: rgb(238, 183, 164);
+}
+ .nosaukums{
+    height: 150px;
+ }
+ .containerParent {
+    display: flex;
+    background-color: rgb(238, 183, 164);
+
+}
+
+
